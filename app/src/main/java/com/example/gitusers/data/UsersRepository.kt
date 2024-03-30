@@ -6,5 +6,5 @@ import javax.inject.Singleton
 
 @Singleton
 class UsersRepository @Inject constructor(private val gitService: GitService) {
-    suspend fun getUsers(userId: Long) = gitService.getUsers(userId = userId)
+    suspend fun getUsers(userId: Int) = gitService.getUsers(userId = userId)
 }

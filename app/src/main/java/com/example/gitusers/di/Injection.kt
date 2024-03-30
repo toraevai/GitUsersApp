@@ -1,11 +1,15 @@
 package com.example.gitusers.di
 
+import android.content.Context
+import androidx.room.Room
 import com.example.gitusers.api.GitService
 import com.example.gitusers.data.UsersRepository
+import com.example.gitusers.db.GitUsersDatabase
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -28,9 +32,15 @@ object Injection {
 
     @Provides
     @Singleton
-    fun provideGitService(retrofit: Retrofit):GitService = retrofit.create(GitService::class.java)
+    fun provideGitService(retrofit: Retrofit): GitService = retrofit.create(GitService::class.java)
 
     @Provides
     @Singleton
-    fun provideUsersRepository(gitService: GitService): UsersRepository = UsersRepository(gitService)
+    fun provideUsersRepository(gitService: GitService): UsersRepository =
+        UsersRepository(gitService)
+
+    @Provides
+    @Singleton
+    fun provideGitUsersDatabase(@ApplicationContext context: Context): GitUsersDatabase =
+        Room.databaseBuilder(context, GitUsersDatabase::class.java, "users").build()
 }

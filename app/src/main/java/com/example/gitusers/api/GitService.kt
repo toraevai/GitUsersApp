@@ -12,6 +12,6 @@ interface GitService {
     @Headers("accept: application/vnd.github+json")
     @GET("users?per_page=${USERS_PER_PAGE}")
     suspend fun getUsers(
-        @Query("since") userId: Long
+        @Query("since") userId: Int
     ): List<User>
 }

@@ -7,24 +7,23 @@ import com.example.gitusers.api.USERS_PER_PAGE
 import com.example.gitusers.model.User
 import retrofit2.HttpException
 import java.io.IOException
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class GitPagingSource(
+@Singleton
+class GitPagingSource @Inject constructor(
     private val gitService: GitService
-) : PagingSource<Long, User>() {
-    override fun getRefreshKey(state: PagingState<Long, User>): Long? {
+) : PagingSource<Int, User>() {
+    override fun getRefreshKey(state: PagingState<Int, User>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Long>): LoadResult<Long, User> {
-        val position = params.key ?: 0
-
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {
         return try {
-            // Start refresh at page 1 if undefined.
-//            val response = gitService.getUsers(position)
-//            val users = response.users
+            val position = params.key ?: 0
             val users = gitService.getUsers(position)
             val nextUserId = if (users.isEmpty()) {
                 null

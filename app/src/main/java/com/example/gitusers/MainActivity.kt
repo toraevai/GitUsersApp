@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.gitusers.ui.ListOfUserScreen
 import com.example.gitusers.ui.ListOfUsersScreenViewModel
 import com.example.gitusers.ui.theme.GitUsersTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,19 +24,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val listOfUsersScreenViewModel = hiltViewModel<ListOfUsersScreenViewModel>()
             GitUsersTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    val users = listOfUsersScreenViewModel.flow.collectAsLazyPagingItems()
-
-                    LazyColumn() {
-                        items(count = users.itemCount) { index ->
-                            Text(text = users[index]!!.login)
-                        }
-                    }
-                }
+                ListOfUserScreen(listOfUsersScreenViewModel = listOfUsersScreenViewModel)
             }
         }
     }
