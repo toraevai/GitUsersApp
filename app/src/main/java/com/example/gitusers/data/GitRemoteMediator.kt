@@ -7,7 +7,7 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.example.gitusers.api.GitService
 import com.example.gitusers.db.GitUsersDatabase
-import com.example.gitusers.model.User
+import com.example.gitusers.model.UserFromList
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -15,21 +15,27 @@ import java.io.IOException
 class GitRemoteMediator(
     private val gitUsersDatabase: GitUsersDatabase,
     private val gitService: GitService
-) : RemoteMediator<Int, User>() {
+) : RemoteMediator<Int, UserFromList>() {
     val userDao = gitUsersDatabase.userDao()
-    override suspend fun load(loadType: LoadType, state: PagingState<Int, User>): MediatorResult {
+    override suspend fun load(loadType: LoadType, state: PagingState<Int, UserFromList>): MediatorResult {
         return try {
             val loadKey = when (loadType) {
-                LoadType.REFRESH -> 0
-                LoadType.PREPEND ->
-                    return MediatorResult.Success(endOfPaginationReached = true)
+                LoadType.REFRESH -> {
+                    val lastItem = state.lastItemOrNull()
+                    lastItem?.id ?: 0
+                }
+                LoadType.PREPEND -> {
+                    val firsItem = state.firstItemOrNull()
+                    if (firsItem == null) {
+                        return MediatorResult.Success(endOfPaginationReached = true)
+                    }
+                    firsItem.id
+                }
 
                 LoadType.APPEND -> {
                     val lastItem = state.lastItemOrNull()
                     if (lastItem == null) {
-                        return MediatorResult.Success(
-                            endOfPaginationReached = true
-                        )
+                        return MediatorResult.Success(endOfPaginationReached = true)
                     }
                     lastItem.id
                 }

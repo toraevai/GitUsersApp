@@ -3,7 +3,6 @@ package com.example.gitusers.di
 import android.content.Context
 import androidx.room.Room
 import com.example.gitusers.api.GitService
-import com.example.gitusers.data.UsersRepository
 import com.example.gitusers.db.GitUsersDatabase
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -33,11 +32,11 @@ object Injection {
     @Provides
     @Singleton
     fun provideGitService(retrofit: Retrofit): GitService = retrofit.create(GitService::class.java)
-
-    @Provides
-    @Singleton
-    fun provideUsersRepository(gitService: GitService): UsersRepository =
-        UsersRepository(gitService)
+//
+//    @Provides
+//    @Singleton
+//    fun provideUsersRepository(gitService: GitService): UsersRepository =
+//        UsersRepository(gitService)
 
     @Provides
     @Singleton

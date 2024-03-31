@@ -1,6 +1,6 @@
 package com.example.gitusers.ui
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,28 +23,42 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.gitusers.R
-import com.example.gitusers.model.User
+import com.example.gitusers.model.UserFromList
+import com.example.gitusers.navigation.NavigationDestination
+
+object ListOfUsersDestination : NavigationDestination {
+    override val route = "list_of_users"
+}
 
 @Composable
-fun ListOfUserScreen(listOfUsersScreenViewModel: ListOfUsersScreenViewModel) {
-    val users = listOfUsersScreenViewModel.flow.collectAsLazyPagingItems()
+fun ListOfUserScreen(gitUsersViewModel: GitUsersViewModel, navigateToUserDetails: (String) -> Unit) {
+    val users = gitUsersViewModel.flow.collectAsLazyPagingItems()
     LazyColumn() {
         items(count = users.itemCount) { index ->
-            UserInList(user = users[index]!!)
+            UserInList(
+                userFromList = users[index]!!,
+                onClick = { navigateToUserDetails(users[index]!!.login) }
+            )
         }
     }
 }
 
 @Composable
-fun UserInList(user: User, modifier: Modifier = Modifier) {
+fun UserInList(
+    userFromList: UserFromList,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
     ) {
-        UserAvatar(url = user.avatarUrl)
+        UserAvatar(url = userFromList.avatarUrl)
         Spacer(modifier = Modifier.width(10.dp))
         Text(
-            text = "User id: ${user.id}, login: ${user.login}",
+            text = "User id: ${userFromList.id}, login: ${userFromList.login}",
             style = MaterialTheme.typography.bodyLarge
         )
     }
