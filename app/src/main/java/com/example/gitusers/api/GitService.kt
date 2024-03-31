@@ -22,6 +22,5 @@ interface GitService {
     @GET("users/{userLogin}")
     suspend fun getUser(
         @Path("userLogin") userLogin: String,
-        @Header("User-Agent") userAgent: String
     ): User
 }

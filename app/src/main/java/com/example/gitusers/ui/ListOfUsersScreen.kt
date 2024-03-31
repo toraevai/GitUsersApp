@@ -55,7 +55,7 @@ fun UserInList(
             .fillMaxWidth()
             .clickable(onClick = onClick)
     ) {
-        UserAvatar(url = userFromList.avatarUrl)
+        UserAvatar(url = userFromList.avatarUrl, modifier = Modifier.size(120.dp))
         Spacer(modifier = Modifier.width(10.dp))
         Text(
             text = "User id: ${userFromList.id}, login: ${userFromList.login}",
@@ -67,7 +67,6 @@ fun UserInList(
 @Composable
 fun UserAvatar(url: String, modifier: Modifier = Modifier) {
     Card(
-        modifier = modifier,
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
@@ -78,7 +77,7 @@ fun UserAvatar(url: String, modifier: Modifier = Modifier) {
             placeholder = painterResource(R.drawable.loading_img),
             contentDescription = stringResource(R.string.user_avatar),
             contentScale = ContentScale.Crop,
-            modifier = Modifier.size(120.dp)
+            modifier = modifier
         )
     }
 }

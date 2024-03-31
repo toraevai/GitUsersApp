@@ -14,7 +14,7 @@ import com.example.gitusers.ui.UserDetailsDestination
 import com.example.gitusers.ui.UserDetailsScreen
 
 @Composable
-fun GitUsersAppNavHost(appContext: Context) {
+fun GitUsersAppNavHost() {
     val gitUsersViewModel = hiltViewModel<GitUsersViewModel>()
     val navController = rememberNavController()
     NavHost(
@@ -31,10 +31,8 @@ fun GitUsersAppNavHost(appContext: Context) {
         }
         composable(
             route = UserDetailsDestination.route + "/{userLogin}",
-            
         ) { backStackEntry ->
-            val userAgent = WebSettings.getDefaultUserAgent(appContext)
-            gitUsersViewModel.getUser(backStackEntry.arguments?.getString("userLogin")!!, userAgent)
+            gitUsersViewModel.getUser(backStackEntry.arguments?.getString("userLogin")!!)
             val user = gitUsersViewModel.user
             UserDetailsScreen(user)
         }

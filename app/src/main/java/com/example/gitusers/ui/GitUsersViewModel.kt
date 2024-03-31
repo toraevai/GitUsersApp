@@ -1,6 +1,5 @@
 package com.example.gitusers.ui
 
-import android.webkit.WebSettings
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -14,12 +13,9 @@ import com.example.gitusers.api.GitService
 import com.example.gitusers.api.USERS_PER_PAGE
 import com.example.gitusers.data.GitRemoteMediator
 import com.example.gitusers.db.GitUsersDatabase
-import com.example.gitusers.model.User
 import com.example.gitusers.model.fakeUser
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
-import okhttp3.internal.userAgent
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,9 +42,16 @@ class GitUsersViewModel @Inject constructor(
 
     var user by mutableStateOf(fakeUser)
 
-    fun getUser(userLogin: String, userAgent: String) {
+    fun getUser(userLogin: String) {
         viewModelScope.launch {
-            user = gitService.getUser(userLogin, userAgent)
+            user = try {
+                gitService.getUser(userLogin)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                fakeUser.copy(
+                    name = e.toString()
+                )
+            }
         }
     }
 }
