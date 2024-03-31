@@ -1,7 +1,5 @@
 package com.example.gitusers.navigation
 
-import android.content.Context
-import android.webkit.WebSettings
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
@@ -32,7 +30,8 @@ fun GitUsersAppNavHost() {
         composable(
             route = UserDetailsDestination.route + "/{userLogin}",
         ) { backStackEntry ->
-            gitUsersViewModel.getUser(backStackEntry.arguments?.getString("userLogin")!!)
+            val userLogin = backStackEntry.arguments?.getString("userLogin")!!
+            gitUsersViewModel.getUser(userLogin)
             val user = gitUsersViewModel.user
             UserDetailsScreen(user)
         }

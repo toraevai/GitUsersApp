@@ -45,7 +45,7 @@ class GitUsersViewModel @Inject constructor(
     fun getUser(userLogin: String) {
         viewModelScope.launch {
             user = try {
-                gitService.getUser(userLogin)
+                gitService.getUser(userLogin.removeSurrounding("{", "}"))
             } catch (e: Exception) {
                 e.printStackTrace()
                 fakeUser.copy(
